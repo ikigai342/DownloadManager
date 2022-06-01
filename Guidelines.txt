@@ -1,0 +1,17 @@
+Functional requirements
+System should move downloads based on where the user sets this location 
+base off of the file extension type. The user should be able to move
+the location for the files and create groups for the extension types.
+The system should be a system that run on startup.
+
+
+Non Funtional requirements
+The data should be stored locally on the drive.
+
+If the location added by the user does not exist it should create the directory,
+
+If a group is deleted all the files inside the group should return to the
+default download folder.
+
+
+
