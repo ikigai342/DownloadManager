@@ -1,4 +1,3 @@
-from importlib.util import source_hash
 from classes.folder import Folder
 from classes.extension import Extension
 
@@ -6,6 +5,11 @@ import glob
 import os
 import shutil
 import pickle
+
+EXTENSION_NAME = "Enter extension name:\n"
+FOLDER_NAME = "Enter folder name:\n"
+FOLDER_DATA = "storage/FolderGroup"
+EXTENSION_DATA = "storage/Extensions"
 
 # writes text to logfile
 def write_to_logfile(text):
@@ -30,10 +34,10 @@ def move_and_create_dir(source, destination, extension):
 
 # Adds extension to a folder class          
 def add_extension(extension_dictionary, folder_dictionary):
-    print("Enter extension name:\n")
+    print(EXTENSION_NAME)
     extension_name = input()
     extension_name = extension_name.lower()
-    print("Enter folder name:\n")
+    print(FOLDER_NAME)
     folder_name = input()
     folder_name = folder_name.lower()
     if extension_dictionary[extension_name].inUse == False:
@@ -48,10 +52,10 @@ def add_extension(extension_dictionary, folder_dictionary):
 
 # Removes extension to a folder class        
 def remove_extension(extension_dictionary, folder_dictionary):
-    print("Enter extension name:\n")
+    print(EXTENSION_NAME)
     extension_name = input()
     extension_name = extension_name.lower()
-    print("Enter folder name:\n")
+    print(FOLDER_NAME)
     folder_name = input()
     folder_name = folder_name.lower()
     if extension_dictionary[extension_name].group == folder_name:
@@ -67,40 +71,45 @@ def remove_extension(extension_dictionary, folder_dictionary):
 # Loads folder group data from file
 def load_folder_data():
     try:
-        file = open("storage/FolderGroup", "rb")
+        file = open(FOLDER_DATA, "rb")
         folder_dictionary = pickle.load(file) 
     except FileNotFoundError:    
         write_to_logfile("No Folder group data found creating empty file")
-        file = open("storage/FolderGroup", "ab")
+        file = open(FOLDER_DATA, "ab")
         folder_dictionary = {}
         folder_dictionary["example"] = Folder("example", "C:/Downloads/example")
         pickle.dump(folder_dictionary, file)
     finally:
         file.close()
-        return folder_dictionary
+        
+    return folder_dictionary
 
 # Loads folder group data from file    
 def load_extension_data():
     try:
-        file = open("storage/Extensions", "rb")
+        file = open(EXTENSION_DATA, "rb")
         extension_dictionary = pickle.load(file)
-    except: 
+    except FileNotFoundError: 
         write_to_logfile("No extensions data found creating empty file")
-        file = open("storage/Extensions", "ab")
+        file = open(EXTENSION_DATA, "ab")
         extension_dictionary = {}
         extension_dictionary["example"] = Extension("example")
         pickle.dump(extension_dictionary, file)
     finally:
         file.close()
-        return extension_dictionary
+        
+    return extension_dictionary
+    
+# Saves folder and extension data    
 def save_data(extension_dictionary, folder_dictionary):  
-    file = open("storage/Extensions", "wb")
+    file = open(EXTENSION_DATA, "wb")
     pickle.dump(extension_dictionary, file)
     file.close
-    file = open("storage/FolderGroup", "wb")
+    file = open(FOLDER_DATA, "wb")
     pickle.dump(folder_dictionary, file)
     file.close
     
+# Finds user's download path
 def get_download_path():
     """Returns the default downloads path for linux or windows"""
     if os.name == 'nt':
@@ -150,7 +159,7 @@ while True:
                 print(folder_dictionary[folders].to_string())
         # Adds user requested extension
         case 3:
-            print("Enter extension name:\n")
+            print(EXTENSION_NAME)
             new_extension = input()
             new_extension = new_extension.lower()
             if new_extension not in extension_dictionary:
@@ -159,7 +168,7 @@ while True:
                 write_to_logfile("Extension already exists")
         # Adds user requested folder group
         case 4:
-            print("Enter folder name:\n")
+            print(FOLDER_NAME)
             new_folder_name = input()
             new_folder_name = new_folder_name.lower()
             print("Enter folder directory:\n")
@@ -171,7 +180,7 @@ while True:
                 write_to_logfile("Folder already exists")
         # Deletes user requested extension
         case 5:
-            print("Enter extension name:\n")
+            print(EXTENSION_NAME)
             delete_extension = input()
             delete_extension = delete_extension.lower()
             try:
@@ -180,7 +189,7 @@ while True:
                 write_to_logfile("Extension does not exists")
         # Deletes user requested folders
         case 6:
-            print("Enter extension name:\n")
+            print(FOLDER_NAME)
             delete_folder = input()
             delete_folder = delete_folder.lower()
             try:

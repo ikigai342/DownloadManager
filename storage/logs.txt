@@ -10,3 +10,4 @@ Extension does not exists
 Folder does not exists
 Folder does not exists
 C:\Users\ikiga\Downloads\test.exe was move to: C:/Downloads/test succesfully
+C:\Users\ikiga\Downloads\New Bitmap image (2).exe was move to: C:/Downloads/test succesfully
