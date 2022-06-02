@@ -1,3 +1,12 @@
-No Folder group data found creating empty file
-No Extensions data found creating empty file
 No extensions data found creating empty file
+No Folder group data found creating empty file
+Extension already exists
+Folder already exists
+Folder already exists
+Folder already exists
+Extension does not exists
+Folder does not exists
+Extension does not exists
+Folder does not exists
+Folder does not exists
+C:\Users\ikiga\Downloads\test.exe was move to: C:/Downloads/test succesfully
