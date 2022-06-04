@@ -16,18 +16,19 @@ def write_to_logfile(text):
     with open("storage/logs.txt", "a", encoding = "utf-8") as log_file:
                 log_file.write(f"{text}\n")
 
-# Moves files to library
-def move_and_create_dir(source, destination, extension):
+# Moves files to directory
+def move_to_directory(source, destination, extension):
     # Checks if directory exists and creates if not  
     if os.path.isdir(destination) == False:
         os.makedirs(destination)
         
-    # Catches if file exists future implementation to change name
+    # Catches if file exists with same name 
+    # Future implementation: ask user to change duplicate name
     try: 
         # Writes all files with the extension type to the destination  
         for files in glob.glob(source + f"\*.{extension}"):           
             shutil.move(files, destination)
-            write_to_logfile(f"{files} was move to: {destination} succesfully")
+            write_to_logfile(f"{files} was moved to: {destination} succesfully")
                 
     except shutil.Error:
         write_to_logfile("File already exists")
@@ -68,8 +69,8 @@ def remove_extension(extension_dictionary, folder_dictionary):
     else:
         write_to_logfile("File not in folder group")
 
-# Loads folder group data from file
-def load_folder_data():
+# gets folder group data from a local file
+def get_folder_data():
     try:
         file = open(FOLDER_DATA, "rb")
         folder_dictionary = pickle.load(file) 
@@ -84,8 +85,8 @@ def load_folder_data():
         
     return folder_dictionary
 
-# Loads folder group data from file    
-def load_extension_data():
+# gets extension data from a local file    
+def get_extension_data():
     try:
         file = open(EXTENSION_DATA, "rb")
         extension_dictionary = pickle.load(file)
@@ -100,7 +101,7 @@ def load_extension_data():
         
     return extension_dictionary
     
-# Saves folder and extension data    
+# Saves folder and extension data to local file
 def save_data(extension_dictionary, folder_dictionary):  
     file = open(EXTENSION_DATA, "wb")
     pickle.dump(extension_dictionary, file)
@@ -122,8 +123,8 @@ def get_download_path():
     else:
         return os.path.join(os.path.expanduser('~'), 'downloads')
   
-extension_dictionary = load_extension_data()
-folder_dictionary = load_folder_data()
+extension_dictionary = get_extension_data()
+folder_dictionary = get_folder_data()
 source = get_download_path()
 
 print(source)
@@ -172,10 +173,11 @@ while True:
             new_folder_name = input()
             new_folder_name = new_folder_name.lower()
             print("Enter folder directory:\n")
-            new_folder_dir = input()
-            new_folder_dir = "C:/" + new_folder_dir
+            new_folder_directory = input()
+            new_folder_directory = "C:/" + new_folder_directory
             if new_folder_name not in folder_dictionary:
-                folder_dictionary[new_folder_name] = Folder(new_folder_name, new_folder_dir)
+                folder_dictionary[new_folder_name] = Folder(new_folder_name, 
+                                                            new_folder_directory)
             else:
                 write_to_logfile("Folder already exists")
         # Deletes user requested extension
@@ -206,10 +208,10 @@ while True:
         case 9:
             for folder_groups in folder_dictionary:
                 for extensions in folder_dictionary[folder_groups].extension_list:
-                    move_and_create_dir(source, folder_dictionary[folder_groups].directory, extensions)
+                    move_to_directory(source, folder_dictionary[folder_groups].directory
+                                      , extensions)
         case 0:
             save_data(extension_dictionary, folder_dictionary)
             quit()
         case _:
             print("Not a valid input")
-    
